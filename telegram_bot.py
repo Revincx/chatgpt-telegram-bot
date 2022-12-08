@@ -27,7 +27,7 @@ class ChatGPT3TelegramBot:
         """
         self.config = config
         self.gpt3_bot = gpt3_bot
-        self.disallowed_message = f'Sorry, you are not allowed to use this bot, please <a href="tg://user?id={bot_owner_id}"CLICK HERE</a> to contact my owner. You can check out the source code at ' \
+        self.disallowed_message = f'Sorry, you are not allowed to use this bot, please <a href="tg://user?id={bot_owner_id}">CLICK HERE</a> to contact my owner. You can check out the source code at ' \
                                    'https://github.com/n3d1117/chatgpt-telegram-bot'
 
     async def help(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -36,7 +36,7 @@ class ChatGPT3TelegramBot:
         """
         await update.message.reply_text("/start - Start the bot\n"
                                         "/reset - Reset conversation\n"
-                                        "/allow - Add a user or group to whitelist"
+                                        "/allow - Add a user or group to whitelist\n"
                                         "/help - Help menu\n\n"
                                         "Open source at https://github.com/n3d1117/chatgpt-telegram-bot",
                                         disable_web_page_preview=True)
@@ -122,7 +122,6 @@ class ChatGPT3TelegramBot:
         typing_task.cancel()
 
         await update.message.reply_text(
-            reply_to_message_id=update.message.message_id,
             text=response['message'],
             parse_mode=constants.ParseMode.MARKDOWN
         )
