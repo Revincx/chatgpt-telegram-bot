@@ -47,7 +47,7 @@ class ChatGPT3TelegramBot:
         """
         if not self.is_allowed(update):
             logging.info(f'User {update.message.from_user.name} is not allowed to start the bot')
-            await self.send_disallowed_message(update, context)
+            await self.send_disallowed_message(update)
             return
 
         logging.info('Bot started')
@@ -59,7 +59,7 @@ class ChatGPT3TelegramBot:
         """
         if not self.is_allowed(update):
             logging.info(f'User {update.message.from_user.name} is not allowed to reset the bot')
-            await self.send_disallowed_message(update, context)
+            await self.send_disallowed_message(update)
             return
 
         logging.info('Resetting the conversation...')
@@ -109,7 +109,7 @@ class ChatGPT3TelegramBot:
         """
         if not self.is_allowed(update):
             logging.info(f'User {update.message.from_user.name} is not allowed to use the bot')
-            await self.send_disallowed_message(update, context)
+            await self.send_disallowed_message(update)
             return
 
         logging.info(f'New message received from user {update.message.from_user.name}')
@@ -121,8 +121,7 @@ class ChatGPT3TelegramBot:
         response = await self.get_chatgpt_response(update.message.text)
         typing_task.cancel()
 
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
+        await update.message.reply_text(
             reply_to_message_id=update.message.message_id,
             text=response['message'],
             parse_mode=constants.ParseMode.MARKDOWN
@@ -139,12 +138,11 @@ class ChatGPT3TelegramBot:
             logging.info(f'Error while getting the response: {str(e)}')
             return {"message": "I'm having some trouble talking to you, please try again later."}
 
-    async def send_disallowed_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def send_disallowed_message(self, update: Update):
         """
         Sends the disallowed message to the user.
         """
-        await context.bot.send_message(
-            chat_id= update.effective_chat.id,
+        await update.message.reply_text(
             text=self.disallowed_message,
             disable_web_page_preview=True,
             parse_mode=constants.ParseMode.HTML
