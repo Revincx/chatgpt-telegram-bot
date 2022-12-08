@@ -90,9 +90,9 @@ class ChatGPT3TelegramBot:
             else:
                 users_file.writelines(list(update.message.text.split(' ')[1] + '\n'))
         else:
-            update.message.reply_text('Please specify a user or group first.')
+            await update.message.reply_text('Please specify a user or group first.')
             return
-        update.message.reply_text('Added the user to whitelist.')
+        await update.message.reply_text('Added the user to whitelist.')
         return
 
     async def send_typing_periodically(self, update: Update, context: ContextTypes.DEFAULT_TYPE, every_seconds):
