@@ -1,11 +1,19 @@
 import asyncio
 import logging
+import os
 
 import telegram.constants as constants
 from asyncChatGPT.asyncChatGPT import Chatbot as ChatGPT3Bot
-from telegram import Update
+from telegram import Update, Chat
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, filters
+from dotenv import load_dotenv
 
+load_dotenv()
+
+users_file = open('./users.txt', 'w+')
+groups_file  = open('./groups.txt', 'w+')
+whitelist_mode = (os.getenv('WHITELIST_MODE') != None) & (len(os.getenv('WHITELIST_MODE')) != 0)
+bot_owner_id = os.getenv('OWNER_ID')
 
 class ChatGPT3TelegramBot:
     """
@@ -19,8 +27,8 @@ class ChatGPT3TelegramBot:
         """
         self.config = config
         self.gpt3_bot = gpt3_bot
-        self.disallowed_message = "Sorry, you are not allowed to use this bot. You can check out the source code at " \
-                                  "https://github.com/n3d1117/chatgpt-telegram-bot"
+        self.disallowed_message = f'Sorry, you are not allowed to use this bot, please <a href="{bot_owner_id}"CLICK HERE</a> to contact my owner. You can check out the source code at ' \
+                                   'https://github.com/n3d1117/chatgpt-telegram-bot'
 
     async def help(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """
@@ -28,6 +36,7 @@ class ChatGPT3TelegramBot:
         """
         await update.message.reply_text("/start - Start the bot\n"
                                         "/reset - Reset conversation\n"
+                                        "/allow - Add a user or group to whitelist"
                                         "/help - Help menu\n\n"
                                         "Open source at https://github.com/n3d1117/chatgpt-telegram-bot",
                                         disable_web_page_preview=True)
@@ -56,6 +65,35 @@ class ChatGPT3TelegramBot:
         logging.info('Resetting the conversation...')
         self.gpt3_bot.reset_chat()
         await context.bot.send_message(chat_id=update.effective_chat.id, text="Done!")
+
+    async def allow(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """
+        Add user to whitelist
+        """
+        if not whitelist_mode:
+            await update.message.reply_text('Whitelist mode is off.')
+            return
+        if str(update.message.from_user.id) != bot_owner_id:
+            await update.message.reply_text('You are not allowed to use this commmand.')
+            return
+        if update.message.reply_to_message != None:
+            users_file.writelines(list(str(update.message.reply_to_message.from_user.id) + '\n'))
+        elif len(update.message.text.split(' ')) > 1:
+            param = update.message.text.split(' ')[1]
+            if param == 'group':
+                if update.message.chat.type == Chat.GROUP or update.message.chat.type == Chat.SUPERGROUP:
+                    groups_file.writelines(list(str(update.message.chat.id) + '\n'))
+                    await update.message.reply_text('Added this group to whiselist.')
+                else:
+                    await update.message.reply_text('Current chat is not a group.')
+                return
+            else:
+                users_file.writelines(list(update.message.text.split(' ')[1] + '\n'))
+        else:
+            update.message.reply_text('Please specify a user or group first.')
+            return
+        update.message.reply_text('Added the user to whitelist.')
+        return
 
     async def send_typing_periodically(self, update: Update, context: ContextTypes.DEFAULT_TYPE, every_seconds):
         """
@@ -108,7 +146,8 @@ class ChatGPT3TelegramBot:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             text=self.disallowed_message,
-            disable_web_page_preview=True
+            disable_web_page_preview=True,
+            parse_mode=constants.PARSEMODE_HTML
         )
 
     async def error_handler(self, update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -121,9 +160,15 @@ class ChatGPT3TelegramBot:
         """
         Checks if the user is allowed to use the bot.
         """
-        if self.config['allowed_user_ids'] == '*':
+        if not whitelist_mode:
             return True
-        return str(update.message.from_user.id) in self.config['allowed_user_ids'].split(',')
+        users_file.seek(0)
+        users = users_file.read().split('\n')
+        groups_file.seek(0)
+        groups = groups_file.read().split('\n')
+        if str(update.message.from_user.id) in users or str(update.message.chat.id) in groups:
+            return True
+        return False
 
     def run(self):
         """
