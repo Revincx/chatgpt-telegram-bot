@@ -178,6 +178,7 @@ class ChatGPT3TelegramBot:
 
         application.add_handler(CommandHandler('start', self.start))
         application.add_handler(CommandHandler('reset', self.reset))
+        application.add_handler(CommandHandler('allow', self.allow))
         application.add_handler(CommandHandler('help', self.help))
         application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), self.prompt))
 
