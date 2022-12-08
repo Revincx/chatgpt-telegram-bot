@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-users_file = open('./users.txt', 'w+')
-groups_file  = open('./groups.txt', 'w+')
+users_file = open('./users.txt', 'r+')
+groups_file  = open('./groups.txt', 'r+')
 whitelist_mode = (os.getenv('WHITELIST_MODE') != None) & (len(os.getenv('WHITELIST_MODE')) != 0)
 bot_owner_id = os.getenv('OWNER_ID')
 
@@ -27,7 +27,7 @@ class ChatGPT3TelegramBot:
         """
         self.config = config
         self.gpt3_bot = gpt3_bot
-        self.disallowed_message = f'Sorry, you are not allowed to use this bot, please <a href="{bot_owner_id}"CLICK HERE</a> to contact my owner. You can check out the source code at ' \
+        self.disallowed_message = f'Sorry, you are not allowed to use this bot, please <a href="tg://user?id={bot_owner_id}"CLICK HERE</a> to contact my owner. You can check out the source code at ' \
                                    'https://github.com/n3d1117/chatgpt-telegram-bot'
 
     async def help(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
