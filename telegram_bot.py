@@ -84,7 +84,7 @@ class ChatGPT3TelegramBot:
             if param == 'group':
                 if update.message.chat.type == Chat.GROUP or update.message.chat.type == Chat.SUPERGROUP:
                     groups_file.writelines(list(str(update.message.chat.id) + '\n'))
-                    await update.message.reply_text('Added this group to whiselist.')
+                    await update.message.reply_text('Added this group to whitelist.')
                 else:
                     await update.message.reply_text('Current chat is not a group.')
                 return
