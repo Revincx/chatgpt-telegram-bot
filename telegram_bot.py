@@ -147,7 +147,7 @@ class ChatGPT3TelegramBot:
             chat_id=update.effective_chat.id,
             text=self.disallowed_message,
             disable_web_page_preview=True,
-            parse_mode=constants.PARSEMODE_HTML
+            parse_mode=constants.ParseMode.HTML
         )
 
     async def error_handler(self, update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
