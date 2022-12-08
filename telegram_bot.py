@@ -144,7 +144,7 @@ class ChatGPT3TelegramBot:
         Sends the disallowed message to the user.
         """
         await context.bot.send_message(
-            chat_id=update.effective_chat.id,
+            chat_id= update.effective_chat.id,
             text=self.disallowed_message,
             disable_web_page_preview=True,
             parse_mode=constants.ParseMode.HTML
