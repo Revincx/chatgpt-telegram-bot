@@ -14,6 +14,7 @@ users_file = open('./users.txt', 'r+')
 groups_file  = open('./groups.txt', 'r+')
 whitelist_mode = (os.getenv('WHITELIST_MODE') != None) & (len(os.getenv('WHITELIST_MODE')) != 0)
 bot_owner_id = os.getenv('OWNER_ID')
+bot_owner_username = os.getenv('OWNER_USERNAME')
 
 class ChatGPT3TelegramBot:
     """
@@ -27,7 +28,7 @@ class ChatGPT3TelegramBot:
         """
         self.config = config
         self.gpt3_bot = gpt3_bot
-        self.disallowed_message = f'Sorry, you are not allowed to use this bot, please <a href="tg://user?id={bot_owner_id}">CLICK HERE</a> to contact my owner. You can check out the source code at ' \
+        self.disallowed_message = f'Sorry, you are not allowed to use this bot, please contact @{bot_owner_username} to request permissons.\n\n You can check out the source code at ' \
                                    'https://github.com/n3d1117/chatgpt-telegram-bot'
 
     async def help(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -66,7 +67,7 @@ class ChatGPT3TelegramBot:
         self.gpt3_bot.reset_chat()
         await context.bot.send_message(chat_id=update.effective_chat.id, text="Done!")
 
-    async def allow(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def allow(self, update: Update):
         """
         Add user to whitelist
         """
@@ -143,8 +144,7 @@ class ChatGPT3TelegramBot:
         """
         await update.message.reply_text(
             text=self.disallowed_message,
-            disable_web_page_preview=True,
-            parse_mode=constants.ParseMode.HTML
+            disable_web_page_preview=True
         )
 
     async def error_handler(self, update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
