@@ -13,7 +13,7 @@ load_dotenv()
 users_file = open('./users.txt', 'r+')
 groups_file  = open('./groups.txt', 'r+')
 whitelist_mode = (os.getenv('WHITELIST_MODE') != None) & (len(os.getenv('WHITELIST_MODE')) != 0)
-bot_owner_id = os.getenv('OWNER_ID')
+bot_owner_id = int(os.getenv('OWNER_ID'))
 bot_owner_username = os.getenv('OWNER_USERNAME')
 
 class ChatGPT3TelegramBot:
@@ -74,7 +74,7 @@ class ChatGPT3TelegramBot:
         if not whitelist_mode:
             await update.message.reply_text('Whitelist mode is off.')
             return
-        if str(update.message.from_user.id) != bot_owner_id:
+        if update.message.from_user.id != bot_owner_id:
             await update.message.reply_text('You are not allowed to use this commmand.')
             return
         if update.message.reply_to_message != None:
@@ -159,8 +159,8 @@ class ChatGPT3TelegramBot:
         {context.error}
         </pre>
         """
-        context.bot.send_message(
-            chat_id=int(os.environ.get('OWNER_ID')),
+        await context.bot.send_message(
+            chat_id=bot_owner_id,
             text=report,
             parse_mode=constants.ParseMode.HTML
         )
