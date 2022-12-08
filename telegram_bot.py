@@ -67,7 +67,7 @@ class ChatGPT3TelegramBot:
         self.gpt3_bot.reset_chat()
         await context.bot.send_message(chat_id=update.effective_chat.id, text="Done!")
 
-    async def allow(self, update: Update):
+    async def allow(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """
         Add user to whitelist
         """
@@ -153,8 +153,7 @@ class ChatGPT3TelegramBot:
         """
         logging.debug(f'Exception while handling an update: {context.error}')
         report=f"""
-        Error occured when handling update:
-
+        Error occured when handling updates:
         <pre>
         {context.error}
         </pre>
