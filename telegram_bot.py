@@ -152,6 +152,18 @@ class ChatGPT3TelegramBot:
         Handles errors in the telegram-python-bot library.
         """
         logging.debug(f'Exception while handling an update: {context.error}')
+        report=f"""
+        Error occured when handling update:
+
+        <pre>
+        {context.error}
+        </pre>
+        """
+        context.bot.send_message(
+            chat_id=int(os.environ.get('OWNER_ID')),
+            text=report,
+            parse_mode=constants.ParseMode.HTML
+        )
 
     def is_allowed(self, update: Update) -> bool:
         """
