@@ -128,8 +128,7 @@ class ChatGPT3TelegramBot:
         typing_task.cancel()
 
         await update.message.reply_text(
-            text=response['message'],
-            parse_mode=constants.ParseMode.MARKDOWN
+            text=response['message']
         )
 
     async def get_chatgpt_response(self, message) -> dict:
@@ -157,12 +156,10 @@ class ChatGPT3TelegramBot:
         Handles errors in the telegram-python-bot library.
         """
         logging.debug(f'Exception while handling an update: {context.error}')
-        report=f"""
-        Error occured when handling updates:
-        <pre>
-        {context.error}
-        </pre>
-        """
+        report="Error occured when handling updates:\n\n"
+        "<pre>"
+        f"{context.error}"
+        "</pre>"
         await context.bot.send_message(
             chat_id=bot_owner_id,
             text=report,
