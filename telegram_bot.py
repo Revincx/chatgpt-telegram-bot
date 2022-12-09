@@ -10,8 +10,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-users_file = open('./users.txt', 'r+')
-groups_file  = open('./groups.txt', 'r+')
+data_folder = os.getenv('DATA_FOLDER')
+
+user_file_path = "./users.txt" if data_folder is None else data_folder + '/users.txt'
+groups_file_path = "./groups.txt" if data_folder is None else data_folder + '/groups.txt'
+
+users_file = open(user_file_path, 'r+')
+groups_file  = open(groups_file_path, 'r+')
 whitelist_mode = (os.getenv('WHITELIST_MODE') != None) & (len(os.getenv('WHITELIST_MODE')) != 0)
 bot_owner_id = int(os.getenv('OWNER_ID'))
 bot_owner_username = os.getenv('OWNER_USERNAME')

@@ -1,15 +1,13 @@
 FROM python:3.10.8
+EXPOSE 8080
 
 WORKDIR /app
 
 COPY . .
 
 # Install pipenv
-RUN pip install pipenv && \
+RUN pip install -U pipenv && \
     pipenv install
 
-# Mount the .env file from the data volume container to the container
-#VOLUME /chatgpt-telegram-bot/.env
-
 # Run the main.py file
-CMD "pipenv", "run", "python", "main.py"
+CMD ["bash", "start.sh"]
