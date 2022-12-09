@@ -1,0 +1,3 @@
+[submodule "Openaibot"]
+	path = Openaibot
+	url = https://github.com/sudoskys/Openaibot.git
