@@ -1,12 +1,33 @@
 # ChatGPT Telegram Bot
 ![python-version](https://img.shields.io/badge/python-3.10-blue.svg)
-[![playwright-version](https://img.shields.io/badge/revChatGPT-0.0.33.3-green.svg)](https://github.com/acheong08/ChatGPT)
+[![playwright-version](https://img.shields.io/badge/revChatGPT-0.0.33.4-green.svg)](https://github.com/acheong08/ChatGPT)
 [![license](https://img.shields.io/badge/License-GPL%202.0-brightgreen.svg)](LICENSE)
 
 A [Telegram bot](https://core.telegram.org/bots/api) that integrates with OpenAI's [ChatGPT](https://openai.com/blog/chatgpt/) to provide answers. Ready to use with minimal configuration required. Based on [acheong08/ChatGPT](https://github.com/acheong08/ChatGPT)
 
 ## Screenshot
 <img width="600" alt="Demo" src="https://user-images.githubusercontent.com/11541888/205654171-80359706-d2ef-4fac-8300-62fe448bfb55.png">
+
+## Features
+- [x] Reply to specific messages
+- [x] Support markdown in answers
+- [x] Can reset conversation thread with the `/reset` command
+- [x] Typing indicator while generating a response
+- [x] Access can be restricted by specifying a list of allowed users
+
+## Additional Features - help needed!
+- [ ] Multi-chat support
+  - Idea: cache different instances of `ChatGPT3Bot`, one for every chat id (maybe even persist them), so that every user has their own private conversation
+- [ ] Support group chats
+  - Allow the bot to be used in group chats with specific commands
+- [ ] Docker support
+  - With `Dockerfile` and `docker-compose.yml`. See [pull/2](https://github.com/n3d1117/chatgpt-telegram-bot/pull/2) for a start
+- [ ] Advanced commands
+  - With premade ad-hoc prompts
+- [ ] Token based authentication 
+  - As an alternative to email/password authentication for those who signed up with other services (Google/Microsoft) or for those who get a `Captcha detected` error, see [#13](https://github.com/n3d1117/chatgpt-telegram-bot/issues/13)
+
+PRs are always welcome!
 
 ## Prerequisites
 - Python 3.10+ and [Pipenv](https://pipenv.readthedocs.io/en/latest/)
@@ -62,6 +83,7 @@ python main.py
 ## Credits
 - [ChatGPT](https://chat.openai.com/chat) from [OpenAI](https://openai.com)
 - [acheong08/ChatGPT](https://github.com/acheong08/ChatGPT) for reverse engineering ChatGPT APIs
+- [rawandahmad698/PyChatGPT](https://github.com/rawandahmad698/PyChatGPT) for his work on the authentication protocol
 - [python-telegram-bot](https://python-telegram-bot.org)
 
 ## Disclaimer
