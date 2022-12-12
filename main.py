@@ -2,7 +2,8 @@ import logging
 import os
 
 from dotenv import load_dotenv
-from asyncChatGPT.asyncChatGPT import Chatbot as ChatGPT3Bot
+from revChatGPT.revChatGPT import AsyncChatbot as ChatGPT3Bot
+
 from telegram_bot import ChatGPT3TelegramBot
 
 
@@ -30,7 +31,8 @@ def main():
     }
     telegram_config = {
         'token': os.environ['TELEGRAM_BOT_TOKEN'],
-        'allowed_user_ids': os.environ.get('ALLOWED_TELEGRAM_USER_IDS', '*')
+        'allowed_user_ids': os.environ.get('ALLOWED_TELEGRAM_USER_IDS', '*'),
+        'use_stream': os.environ.get('USE_STREAM', 'true').lower() == 'true'
     }
 
     if os.environ.get('PROXY', None) is not None:
