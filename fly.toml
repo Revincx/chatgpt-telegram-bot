@@ -1,6 +1,6 @@
-# fly.toml file generated for chatgpt-bot on 2022-12-09T14:17:33+08:00
+# fly.toml file generated for chatgpt-bot-mia on 2022-12-12T12:02:25+08:00
 
-app = "chatgpt-bot"
+app = "chatgpt-bot-mia"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
@@ -13,8 +13,8 @@ processes = []
   auto_rollback = true
 
 [[mounts]]
-source="data"
-destination="/data"
+  destination = "/data"
+  source = "data"
 
 [[services]]
   http_checks = []
